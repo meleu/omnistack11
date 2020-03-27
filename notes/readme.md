@@ -232,3 +232,29 @@ app.use(routes);
 
 app.listen(3333);
 ```
+
+### endpoints a serem testados no insomnia
+
+- `POST /sessions`
+    - envia: `id` dentro do body
+    - recebe: nome da ONG
+- `GET /ongs`
+    - recebe: lista de ONGs
+- `POST /ongs`
+    - envia: `name`, `email`, `whatsapp`, `city`, `state` dentro do body
+    - recebe: id e outros dados da ONG recém cadastrada.
+- `GET /profile`
+    - envia: `ong_id` no cabeçalho `Authorization`
+    - recebe: lista de casos (incidents)
+- `GET /incidents`
+    - recebe: `page` via query parameter
+    - envia:
+        - 5 últimos casos
+        - cabeçalho `X-Total-Count` com o total de casos desta ONG
+- `POST /incidents`
+    - envia: `title`, `description`, `value` dentro de body
+    - recebe: informações sobre o caso recém criado
+- `DELETE /incidents`
+    - envia:
+        - `id` do caso via parâmetro da url
+        - `ong_id` via cabeçalho `Authorization`
