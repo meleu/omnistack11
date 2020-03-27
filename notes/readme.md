@@ -258,3 +258,51 @@ app.listen(3333);
     - envia:
         - `id` do caso via parâmetro da url
         - `ong_id` via cabeçalho `Authorization`
+
+## Aula 3
+
+Dentro do diretório `frontent`, excluir os seguintes arquivos:
+
+- `README.md`
+- `src/`:
+    - `App.css`
+    - `App.test.js`
+    - `index.css`
+    - `logo.svg`
+    - `serviceWorker.js`
+    - `setupTests.js`
+- `public/`:
+    - `robots.txt`
+    - `manifest.json`
+    - `logo*.png`
+
+No arquivo `src/index.js`, remover importação do arquivo `./index.css` e linhas relacionadas ao `serviceWorker`.
+
+No arquivo `src/App.js`, remover importação do `./App.css` e `logo.svg`, e dentro de `funcion App()` retornar apenas um `<h1>Hello World</h1>`.
+
+No arquivo `public/index.html`, remover de `<meta name="description" ...` até antes de `<title>`, remover os comentários. Setar o `<title>Be The Hero</title>`.
+
+Por fim mandar um `npm start` para checar se o Hello World vai funcionar deboas.
+
+### Conceitos
+
+**Componentes**
+
+Um componente React é uma função que retorna código html.
+
+**JSX**
+
+JSX é formato de arquivo que aceita XML dentro do código JavaScript.
+
+**Propriedades**
+
+Podemos mandar propriedades para os Components usando atributos na função que invoca o componente.
+
+[00:16:15] A propriedade `children` retorna todos elementos filhos do componente.
+
+
+
+### `src/Header.js`
+
+```js
+```
