@@ -588,5 +588,421 @@ Criar `src/pages/Profile/styles.css`:
 
 ## Cadastrando novo caso
 
-01h 6min
+Criar entrada para `NewIncident` em `src/routes.js`:
+```js
+// ...
+import NewIncident from './pages/NewIncident';
+// ...
+        <Route path="/incident/new" component={NewIncident} />
+// ...
+```
+
+Criar o `src/pages/NewIncident/index.js`:
+```js
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FiArrowLeft } from 'react-icons/fi';
+
+import './styles.css';
+
+import imgLogo from '../../assets/logo.svg';
+
+export default function NewIncident() {
+  return (
+    <div className="new-incident-container">
+      <div className="content">
+        <section>
+          <img src={imgLogo} alt="Be The Hero" />
+
+          <h1>Cadastrar novo caso</h1>
+          <p>
+            Descreva o caso detalhadamente para encontrar um herói para resolver isso.
+          </p>
+
+          <Link className="back-link" to="/profile">
+            <FiArrowLeft size={16} color="#E02041" />
+            Voltar para o seu pefil.
+          </Link>
+        </section>
+
+        <form>
+          <input placeholder="Título do caso" />
+          <textarea placeholder="Descrição" />
+          <input placeholder="Valor em reais" />
+
+          <button className="button" type="submit">Cadastrar</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+```
+
+Criar o `src/pages/NewIncident/styles.css`:
+```css
+.new-incident-container {
+  width: 100%;
+  max-width: 1120px;
+  height: 100vh;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.new-incident-container .content {
+  width: 100%;
+  padding: 96px;
+  background: #f0f0f5;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.new-incident-container .content section {
+  width: 100%;
+  max-width: 380px;
+}
+
+.new-incident-container .content section h1 {
+  margin: 64px 0 32px;
+  font-size: 32px;
+}
+
+.new-incident-container .content section p {
+  font-size: 18px;
+  color: #737380;
+  line-height: 32px;
+}
+
+.new-incident-container .content form {
+  width: 100%;
+  max-width: 450px;
+}
+
+.new-incident-container .content form input,
+.new-incident-container .content form textarea {
+  margin-top: 8px;
+}
+```
+
+Também foi necessário adicionar o seguinte ao `src/global.css`:
+```css
+/* logo abaixo do bloco 'form input' */
+
+form textarea {
+  width: 100%;
+  min-height: 140px;
+  color: #333;
+  border: 1px solid #dcdce6;
+  border-radius: 8px;
+  padding: 16px 24px;
+  line-height: 24px;
+  resize: vertical;
+}
+```
+
+## Integrando com o backend
+
+Ir no diretório do backend a inicializá-lo:
+```
+cd path/to/backend
+npm start
+```
+
+Voltando ao frontend...
+
+Para acessar a API do backend, vamos usar o `axios`:
+```
+npm install axios
+```
+
+Criar o arquivo `src/services/api.js`:
+
+```js
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://localhost:3333',
+});
+
+export default api;
+```
+
+### Cadastro
+
+No arquivo `src/pages/Register/index.js`:
+
+```js
+// importar useState e useHistory:
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+
+//... importar api.js
+import api from '../../services/api.js
+
+//... antes do return, adicionar o seguinte:
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+
+  const history = useHistory();
+
+  async function handleRegister(e) {
+    e.preventDefault();
+
+    const data = {
+      name,
+      email,
+      whatsapp,
+      city,
+      state,
+    };
+
+    try {
+      const response = await api.post('ongs', data);
+      alert(`Seu ID de acesso: ${response.data.id}`);
+      history.push('/');
+    } catch (err) {
+      alert('Erro no cadastro, tente novamente');
+    }
+  }
+
+
+//... alterar o <form> para o seguinte:
+        <form onSubmit={handleRegister}>
+          <input
+            placeholder="Nome da ONG"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <input
+            placeholder="WhatsApp"
+            value={whatsapp}
+            onChange={(e) => setWhatsapp(e.target.value)}
+          />
+
+          <div className="input-group">
+            <input
+              placeholder="Cidade"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+
+            <input
+              placeholder="UF"
+              style={{ width: 80 }}
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+            />
+          </div>
+
+          <button className="button" type="submit">Cadastrar</button>
+        </form>
+```
+
+Testar criando uma conta.
+
+### Logon
+
+// importar useState e useHistory:
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+
+//... importar api.js
+import api from '../../services/api.js
+
+//... antes do return, adicionar o seguinte:
+  const [id, setId] = useState('');
+  const history = useHistory();
+
+  async function handleLogin(e) {
+    e.preventDefault();
+
+    try {
+      const response = await api.post('sessions', { id });
+
+      localStorage.setItem('ongId', id);
+      localStorage.setItem('ongName', response.data.name);
+
+      history.push('/profile');
+    } catch (err) {
+      alert('Falha no login, tente novamente.');
+    }
+  }
+
+//... no <form> adicionar/alterar o seguinte:
+        <form onSubmit={handleLogin}>
+          <h1>Faça seu logon</h1>
+
+          <input
+            placeholder="Sua ID"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+          />
+//...
+```
+
+Testar se a tela de logon vai funcionar.
+
+
+### ONG visualizando seus próprios casos
+
+
+```js
+// importar useState, useEffect e useHistory:
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+
+//... importar api.js
+import api from '../../services/api.js
+
+//... antes do return, adicionar o seguinte:
+  const [incidents, setIncidents] = useState([]);
+
+  const history = useHistory();
+
+  const ongId = localStorage.getItem('ongId');
+  const ongName = localStorage.getItem('ongName');
+
+  useEffect(() => {
+    api.get('profile', {
+      headers: {
+        Authorization: ongId,
+      },
+    }).then((response) => setIncidents(response.data));
+  }, [ongId]);
+
+  async function handleDeleteIncident(id) {
+    try {
+      await api.delete(`incidents/${id}`, {
+        headers: {
+          Authorization: ongId,
+        },
+      });
+
+      setIncidents(incidents.filter((incident) => incident.id !== id));
+    } catch (err) {
+      alert('Erro ao deletar caso, tente novamente.');
+    }
+  }
+
+  function handleLogout() {
+    localStorage.clear();
+    history.push('/');
+  }
+
+//... alterações no return():
+        <span> Bem vinda, {ongName}</span>
+
+//... chamar handleLogout no button de logout
+        <button onClick={handleLogout} type="button">
+          <FiPower size={18} color="#e02041" />
+        </button>
+
+//... lista de casos cadastrados:
+      <ul>
+        {incidents.map((incident) => (
+          <li key={incident.id}>
+            <strong>CASO:</strong>
+            <p>
+              {incident.title}
+            </p>
+
+            <strong>DESCRIÇÃO:</strong>
+            <p>
+              {incident.description}
+            </p>
+
+            <strong>VALOR:</strong>
+            <p>
+              {Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(incident.value)}
+            </p>
+
+            <button onClick={() => handleDeleteIncident(incident.id)} type="button">
+              <FiTrash2 size={20} color="#a8a8b3" />
+            </button>
+          </li>
+        ))}
+      </ul>
+```
+
+
+
+### Cadastrar novo caso
+
+```js
+// importar useState e useHistory:
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+
+//... importar api.js
+import api from '../../services/api.js
+
+//... antes do return, adicionar o seguinte:
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [value, setValue] = useState('');
+
+  const history = useHistory();
+
+  const ongId = localStorage.getItem('ongId');
+
+  async function handleNewIncident(e) {
+    e.preventDefault();
+
+    const data = {
+      title,
+      description,
+      value,
+    };
+
+    try {
+      await api.post('incidents', data, {
+        headers: {
+          Authorization: ongId,
+        },
+      });
+
+      history.push('/profile');
+    } catch (err) {
+      alert('Erro ao cadastrar caso, tente novamente.');
+    }
+  }
+
+//... alterar o <form>
+        <form onSubmit={handleNewIncident}>
+          <input
+            placeholder="Título do caso"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <textarea
+            placeholder="Descrição"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <input
+            placeholder="Valor em reais"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+
+          <button className="button" type="submit">Cadastrar</button>
+        </form>
+```
 

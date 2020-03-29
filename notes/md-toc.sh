@@ -16,7 +16,8 @@
 #
 # meleu - March/2020
 
-INVALID_CHARS="'[]/?!:\`.,()*\";{}+=<>~$|#@&â€“â€”"
+
+INVALID_CHARS="'[]/?!:\`.,()*\";{}+=<>~$|#@&–—"
 VALID_EXTENSIONS='markdown|mdown|mkdn|md|mkd|mdwn|mdtxt|mdtext|text|Rmd|txt'
 
 USAGE="\nUsage:\n$0 markdownFile.md"
