@@ -26,3 +26,5 @@
     - [Integrando com o backend](aula3.md#integrando-com-o-backend)
         - [Cadastro](aula3.md#cadastro)
         - [Logon](aula3.md#logon)
+        - [ONG visualizando seus próprios casos](aula3.md#ong-visualizando-seus-próprios-casos)
+        - [Cadastrar novo caso](aula3.md#cadastrar-novo-caso)
