@@ -28,6 +28,10 @@ module.exports = {
     const { title, description, value } = req.body;
     const ong_id = req.headers.authorization;
 
+    if (!ong_id) {
+      return res.status(401).json({ error: 'Missing Authorization header.' });
+    }
+
     const [id] = await connection('incidents').insert({
       title,
       description,
