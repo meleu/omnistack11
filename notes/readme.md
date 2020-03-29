@@ -301,8 +301,329 @@ Podemos mandar propriedades para os Components usando atributos na função que 
 [00:16:15] A propriedade `children` retorna todos elementos filhos do componente.
 
 
+### assets
 
-### `src/Header.js`
+Colocar `heroes.png` e `logo.svg` em `src/assets/`.
+
+Também instalar `react-icons` para obter ícones que ajudarão no design.
+
+```
+npm install react-icons
+```
+
+### Adicionando Rotas
+
+```
+npm install react-router-dom
+```
+
+Criar o arquivo de rotas `src/routes.js`:
 
 ```js
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+import Logon from './pages/Logon';
+
+export default function Routes() {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact component={Logon} />
+      </Switch>
+    </BrowserRouter>
+  );
+}
 ```
+
+Agora o `src/App.js` vai ficar assim:
+
+```js
+import React from 'react';
+
+import './global.css';
+
+import Routes from './routes';
+
+function App() {
+  return <Routes />;
+}
+
+export default App;
+```
+
+Criar o `src/global.css`
+
+```css
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font: 400 14px Roboto, sans-serif;
+  background: #f0f0f5;
+  -webkit-font-smoothing: antialiased;
+}
+
+input, button, textarea {
+  font: 400 14px Roboto, sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+form input {
+  width: 100%;
+  height: 60px;
+  color: #333;
+  border: 1px solid #dcdce6;
+  border-radius: 8px;
+  padding: 0 24px;
+}
+
+.button {
+  width: 100%;
+  height: 60px;
+  background: #e02041;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  margin-top: 16px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  line-height: 60px;
+  transition: filter 0.2s;
+}
+
+.button:hover {
+  filter: brightness(80%);
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  margin-top: 40px;
+  color: #41414d;
+  font-size: 18px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.back-link svg {
+  margin-right: 8px;
+}
+
+.back-link:hover {
+  opacity: 0.8;
+}
+```
+
+
+### Página de Logon
+
+A página de logon será a página incial (conforme pode ser visto no `src/routes.js`).
+
+Criar `src/pages/Logon/index.js`:
+
+```js
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FiLogIn } from 'react-icons/fi';
+
+import './styles.css';
+
+import imgLogo from '../../assets/logo.svg';
+import imgHeroes from '../../assets/heroes.png';
+
+
+export default function Logon() {
+  return (
+    <div className="logon-container">
+      <section className="form">
+        <img src={imgLogo} alt="Be The Hero" />
+
+        <form>
+          <h1>Faça seu logon</h1>
+
+          <input placeholder="Sua ID" />
+          <button className="button" type="submit">Entrar</button>
+
+          <Link className="back-link" to="/register">
+            <FiLogIn size={16} color="#E02041" />
+            Não tenho cadastro
+          </Link>
+        </form>
+      </section>
+
+      <img src={imgHeroes} alt="Heroes" />
+    </div>
+  );
+}
+```
+
+Criar `src/pages/Logon/styles.css`:
+
+```css
+.logon-container {
+  width: 100%;
+  max-width: 1120px;
+  height: 100vh;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logon-container section.form {
+  width: 100%;
+  max-width: 350px;
+  margin-right: 30px;
+}
+
+.logon-container section.form form {
+  margin-top: 100px;
+}
+
+.logon-container section.form form h1 {
+  font-size: 32px;
+  margin-bottom: 32px;
+}
+```
+
+
+### Página de Cadastro
+
+Lembrar dos 3 passos ao adicionar um novo componente/página:
+1. Criar entrada para a página no `src/routes.js`;
+2. Criar arquivo `src/pages/NovaPagina/index.js`;
+3. Criar estilização da NovaPagina em `src/pages/NovaPagina/styles.css`.
+
+Criar entrada para `Register` em `src/routes.js`:
+```js
+// ...
+import Register from './pages/Register';
+// ...
+        <Route path="/register" component={Register} />
+// ...
+```
+
+Criar `src/pages/Register/index.js`:
+```js
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FiArrowLeft } from 'react-icons/fi';
+
+import './styles.css';
+
+import imgLogo from '../../assets/logo.svg';
+
+export default function Register() {
+  return (
+    <div className="register-container">
+      <div className="content">
+        <section>
+          <img src={imgLogo} alt="Be The Hero" />
+
+          <h1>Cadastro</h1>
+          <p>
+            Faça seu cadastro, entre na plataforma e ajude pessoas a
+            encontrarem os casos da sua ONG.
+          </p>
+
+          <Link className="back-link" to="/">
+            <FiArrowLeft size={16} color="#E02041" />
+            Não tenho cadastro
+          </Link>
+        </section>
+
+        <form>
+          <input placeholder="Nome da ONG" />
+          <input type="Email" placeholder="email" />
+          <input placeholder="WhatsApp" />
+          <div className="input-group">
+            <input placeholder="Cidade" />
+            <input placeholder="UF" style={{ width: 80 }} />
+          </div>
+
+          <button className="button" type="submit">Cadastrar</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+```
+
+Criar `src/pages/Register/styles.css`:
+```css
+.register-container {
+  width: 100%;
+  max-width: 1120px;
+  height: 100vh;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-container .content {
+  width: 100%;
+  padding: 96px;
+  background: #f0f0f5;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.register-container .content section {
+  width: 100%;
+  max-width: 380px;
+}
+
+.register-container .content section h1 {
+  margin: 64px 0 32px;
+  font-size: 32px;
+}
+
+.register-container .content section p {
+  font-size: 18px;
+  color: #737380;
+  line-height: 32px;
+}
+
+.register-container .content form {
+  width: 100%;
+  max-width: 450px;
+}
+
+.register-container .content form input {
+  margin-top: 8px;
+}
+
+.register-container .content form .input-group {
+  display: flex;
+}
+
+.register-container .content form .input-group input + input {
+  margin-left: 8px;
+}
+```
+
+### Listar casos de uma ONG
+
+58 min
+
