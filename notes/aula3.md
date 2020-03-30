@@ -1,4 +1,4 @@
-# Aula 3
+# Aula 3 - frontend web com ReactJS
 
 Dentro do diretório `frontent`, excluir os seguintes arquivos:
 

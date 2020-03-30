@@ -1,4 +1,4 @@
-# Aula 2
+# Aula 2 - Backend com Node.js
 
 ## Ferramentas e bibliotecas
 
