@@ -34,3 +34,4 @@
         - [Rotas](aula4.md#rotas)
         - [Lista de casos](aula4.md#lista-de-casos)
         - [Detalhes de um caso](aula4.md#detalhes-de-um-caso)
+    - [Integrando com a API](aula4.md#integrando-com-a-api)
