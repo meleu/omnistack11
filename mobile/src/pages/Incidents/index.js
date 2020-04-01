@@ -28,14 +28,12 @@ export default function Incidents() {
 
     setLoading(true);
 
-
-
     const response = await api.get('incidents', {
       params: { page }
     });
 
     setIncidents([...incidents, ...response.data]);
-    setTotal(response.haders['x-total-count']);
+    setTotal(response.headers['x-total-count']);
     setPage(page + 1);
     setLoading(false);
   }
